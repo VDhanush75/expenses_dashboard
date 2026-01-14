@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expenses Tracker Dashboard</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- Landing Page -->
+<div id="landing" {% if showDashboard %}style="display:none"{% endif %}>
+  <div class="logo">💰</div>
+  <h1>Expense Vision</h1>
+  <div class="loader">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard" {% if not showDashboard %}class="hidden"{% endif %}>
+
+  <!-- Upload CSV -->
+   {% if error %}
+  <p style="color:red; font-weight:bold;">{{ error }}</p>
+{% endif %}
+
+<form action="/upload" method="POST" enctype="multipart/form-data">
+  <input type="file" name="csvfile" required>
+  <button type="submit">Upload CSV</button>
+</form>
+
+<!-- <form action="/reset">
+  <button type="submit" style="background:red;color:white;">Reset CSV</button>
+</form> -->
+
+<form action="/reset" method="POST">
+  <button type="submit" style="background:red;color:white;">Reset CSV</button>
+</form>
+  <hr>
+
+  <!-- Top Cards -->
+  <div class="cards">
+    <div class="card">
+      <h3>Total Amount</h3>
+      <!-- <p>{{ totalAmount or 0 }}</p> -->
+       <p id="totalAmount" data-value="{{ totalAmount or 0 }}">0</p>
+
+    </div>
+
+    <div class="card">
+      <h3>Total Expenses</h3>
+      <!-- <p>{{ totalExpenses or 0 }}</p> -->
+      <p id="totalExpenses" data-value="{{ totalExpenses or 0 }}">0</p>
+    </div>
+
+    <div class="card">
+      <h3>Current Balance</h3>
+      <!-- <p>{{ currentBalance or 0 }}</p> -->
+      <p id="currentBalance" data-value="{{ currentBalance or 0 }}">0</p>
+    </div>
+  </div>
+
+<!-- Charts Section -->
+<div class="charts">
+
+  {% if pieChart %}
+  <div class="chart-box">
+    <h3>Category-wise Expenses</h3>
+    <img src="{{ pieChart }}" width="100%">
+  </div>
+  {% endif %}
+
+  {% if barChart %}
+  <div class="chart-box">
+    <h3>Member-wise Expenses</h3>
+    <img src="{{ barChart }}" width="100%">
+  </div>
+  {% endif %}
+
+  {% if weeklyChart %}
+  <div class="chart-box">
+    <h3>Weekly Expenses</h3>
+    <img src="{{ weeklyChart }}" width="100%">
+  </div>
+  {% endif %}
+
+  {% if monthlyChart %}
+  <div class="chart-box">
+    <h3>Monthly Expenses</h3>
+    <img src="{{ monthlyChart }}" width="100%">
+  </div>
+  {% endif %}
+
+  {% if yearlyChart %}
+  <div class="chart-box">
+    <h3>Yearly Expenses</h3>
+    <img src="{{ yearlyChart }}" width="100%">
+  </div>
+  {% endif %}
+
+</div>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
